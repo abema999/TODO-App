@@ -10,35 +10,47 @@ import { formatDistanceToNow } from 'date-fns';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-const App = () => {
-  const todoData = [
-    {
-      description: 'Completed task',
-      created: formatDistanceToNow(new Date()),
-      status: 'completed',
-      id: 1,
-    },
-    {
-      description: 'Editing task',
-      created: formatDistanceToNow(new Date()),
-      status: 'editing',
-      id: 2,
-    },
-    { description: 'Active task', created: formatDistanceToNow(new Date()), status: null, id: 3 },
-  ];
+class App extends React.Component {
+  state = {
+    todoData: [
+      {
+        description: 'Task 1',
+        created: formatDistanceToNow(new Date()),
+        id: 1,
+      },
+      {
+        description: 'Task 2',
+        created: formatDistanceToNow(new Date()),
+        id: 2,
+      },
+      {
+        description: 'Task 3',
+        created: formatDistanceToNow(new Date()),
+        id: 3,
+      },
+    ],
+  };
 
-  return (
-    <section className='todo-app'>
-      <header className='header'>
-        <h1>TODOS</h1>
-        <NewTaskForm></NewTaskForm>
-      </header>
-      <section className='main'>
-        <TaskList todos={todoData}></TaskList>
-        <Footer></Footer>
+  deleteTask = (id) => {
+    this.setState((prevState) => ({
+      todoData: prevState.todoData.filter((task) => task.id !== id),
+    }));
+  };
+
+  render() {
+    return (
+      <section className='todo-app'>
+        <header className='header'>
+          <h1>TODOS</h1>
+          <NewTaskForm></NewTaskForm>
+        </header>
+        <section className='main'>
+          <TaskList todos={this.state.todoData} onDelete={this.deleteTask}></TaskList>
+          <Footer></Footer>
+        </section>
       </section>
-    </section>
-  );
-};
+    );
+  }
+}
 
 root.render(<App></App>);
