@@ -1,25 +1,12 @@
 import React from 'react';
 import './task.css';
 
+import { formatDistanceToNow } from 'date-fns';
+
 class Task extends React.Component {
-  state = {
-    completed: false,
-  };
-
-  onComplete = () => {
-    this.setState((prevState) => {
-      return { completed: !prevState.completed };
-    });
-  };
-
   render() {
-    const { description, created, id, onDelete } = this.props;
-    const { completed } = this.state;
-    let status = '';
-
-    if (completed) {
-      status = 'completed';
-    }
+    const { description, created, completed, id, onDelete, onComplete } = this.props;
+    const status = completed ? 'completed' : '';
 
     return (
       <li className={status}>
@@ -27,12 +14,12 @@ class Task extends React.Component {
           <input
             className='toggle'
             type='checkbox'
-            onChange={this.onComplete}
-            checked={this.state.completed}
+            onChange={() => onComplete(id)}
+            checked={this.props.completed}
           />
           <label>
             <span className='description'>{description}</span>
-            <span className='created'>{created}</span>
+            <span className='created'>{formatDistanceToNow(created)}</span>
           </label>
           <button className='icon icon-edit'></button>
           <button className='icon icon-destroy' onClick={() => onDelete(id)}></button>

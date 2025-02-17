@@ -5,11 +5,9 @@ import Task from '../task/task';
 
 class TaskList extends React.Component {
   render() {
-    const { todos, onDelete } = this.props;
-    const elements = todos.map((item) => {
-      const { ...itemProps } = item;
-
-      return <Task key={item.id} {...itemProps} onDelete={onDelete}></Task>;
+    const { tasks, onDelete, onComplete } = this.props;
+    const elements = tasks.map((task) => {
+      return <Task key={task.id} {...task} onDelete={onDelete} onComplete={onComplete}></Task>;
     });
 
     return <ul className='todo-list'>{elements}</ul>;
