@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './task.css';
 
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNowStrict } from 'date-fns';
 
 class Task extends React.Component {
   render() {
@@ -19,7 +20,7 @@ class Task extends React.Component {
           />
           <label>
             <span className='description'>{description}</span>
-            <span className='created'>{formatDistanceToNow(created)}</span>
+            <span className='created'>created {formatDistanceToNowStrict(created)} ago</span>
           </label>
           <button className='icon icon-edit'></button>
           <button className='icon icon-destroy' onClick={() => onDelete(id)}></button>
@@ -29,5 +30,25 @@ class Task extends React.Component {
     );
   }
 }
+
+Task.defaultProps = {
+  task: {
+    id: 0,
+    description: '',
+    completed: false,
+  },
+  onDelete: () => {},
+  onComplete: () => {},
+};
+
+Task.propTypes = {
+  task: PropTypes.shape({
+    id: PropTypes.number,
+    description: PropTypes.string,
+    completed: PropTypes.bool,
+  }),
+  onDelete: PropTypes.func,
+  onComplete: PropTypes.func,
+};
 
 export default Task;

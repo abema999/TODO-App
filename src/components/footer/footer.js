@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './footer.css';
 
 import TaskFilter from '../task-filter';
@@ -18,5 +19,19 @@ class Footer extends React.Component {
     );
   }
 }
+
+Footer.defaultProps = {
+  uncompletedTasks: 0,
+  deleteAllCompletedTasks: () => {},
+  filter: 'all',
+  selectFilter: () => {},
+};
+
+Footer.propTypes = {
+  uncompletedTasks: PropTypes.number,
+  deleteAllCompletedTasks: PropTypes.func,
+  filter: PropTypes.string,
+  selectFilter: PropTypes.func,
+};
 
 export default Footer;

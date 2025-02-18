@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import PropTypes from 'prop-types';
 import './index.css';
 
 import TaskList from './components/task-list';
@@ -101,5 +102,21 @@ class App extends React.Component {
     );
   }
 }
+
+App.defaultProps = {
+  todoData: [],
+  filter: 'all',
+};
+
+App.propTypes = {
+  todoData: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      description: PropTypes.string,
+      completed: PropTypes.bool,
+    })
+  ),
+  filter: PropTypes.string,
+};
 
 root.render(<App></App>);
