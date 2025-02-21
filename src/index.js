@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import PropTypes from 'prop-types';
-import './index.css';
 
+import './index.css';
 import TaskList from './components/task-list';
 import NewTaskForm from './components/new-task-form';
 import Footer from './components/footer';
@@ -47,7 +47,7 @@ class App extends React.Component {
   completeTask = (id) => {
     this.setState((prevState) => ({
       todoData: prevState.todoData.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
+        task.id === id ? { ...task, completed: !task.completed } : task,
       ),
     }));
   };
@@ -80,12 +80,12 @@ class App extends React.Component {
     const filteredTasks = this.filterTasks(this.state.todoData, this.state.filter);
 
     return (
-      <section className='todo-app'>
-        <header className='header'>
+      <section className="todo-app">
+        <header className="header">
           <h1>TODOS</h1>
           <NewTaskForm onAdd={this.addTask}></NewTaskForm>
         </header>
-        <section className='main'>
+        <section className="main">
           <TaskList
             tasks={filteredTasks}
             onDelete={this.deleteTask}
@@ -114,7 +114,7 @@ App.propTypes = {
       id: PropTypes.number,
       description: PropTypes.string,
       completed: PropTypes.bool,
-    })
+    }),
   ),
   filter: PropTypes.string,
 };

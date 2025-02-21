@@ -24,7 +24,7 @@ class TaskFilter extends React.Component {
       );
     });
 
-    return <ul className='filters'>{buttons}</ul>;
+    return <ul className="filters">{buttons}</ul>;
   }
 }
 

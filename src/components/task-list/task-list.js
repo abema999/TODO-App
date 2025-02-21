@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './task-list.css';
 
+import './task-list.css';
 import Task from '../task/task';
 
 class TaskList extends React.Component {
@@ -11,7 +11,7 @@ class TaskList extends React.Component {
       return <Task key={task.id} {...task} onDelete={onDelete} onComplete={onComplete}></Task>;
     });
 
-    return <ul className='todo-list'>{elements}</ul>;
+    return <ul className="todo-list">{elements}</ul>;
   }
 }
 
@@ -27,7 +27,7 @@ TaskList.propTypes = {
       id: PropTypes.number,
       description: PropTypes.string,
       completed: PropTypes.bool,
-    })
+    }),
   ),
   onDelete: PropTypes.func,
   onComplete: PropTypes.func,

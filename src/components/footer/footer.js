@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './footer.css';
 
+import './footer.css';
 import TaskFilter from '../task-filter';
 
 class Footer extends React.Component {
@@ -9,10 +9,10 @@ class Footer extends React.Component {
     const { uncompletedTasks, deleteAllCompletedTasks, filter, selectFilter } = this.props;
 
     return (
-      <footer className='footer'>
-        <span className='todo-count'>{uncompletedTasks} items left</span>
+      <footer className="footer">
+        <span className="todo-count">{uncompletedTasks} items left</span>
         <TaskFilter filter={filter} selectFilter={selectFilter}></TaskFilter>
-        <button className='clear-completed' onClick={() => deleteAllCompletedTasks()}>
+        <button className="clear-completed" onClick={() => deleteAllCompletedTasks()}>
           Clear completed
         </button>
       </footer>

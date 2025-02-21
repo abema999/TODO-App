@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './task.css';
-
 import { formatDistanceToNowStrict } from 'date-fns';
 
 class Task extends React.Component {
@@ -11,21 +10,21 @@ class Task extends React.Component {
 
     return (
       <li className={status}>
-        <div className='view'>
+        <div className="view">
           <input
-            className='toggle'
-            type='checkbox'
+            className="toggle"
+            type="checkbox"
             onChange={() => onComplete(id)}
             checked={this.props.completed}
           />
           <label>
-            <span className='description'>{description}</span>
-            <span className='created'>created {formatDistanceToNowStrict(created)} ago</span>
+            <span className="description">{description}</span>
+            <span className="created">created {formatDistanceToNowStrict(created)} ago</span>
           </label>
-          <button className='icon icon-edit'></button>
-          <button className='icon icon-destroy' onClick={() => onDelete(id)}></button>
+          <button className="icon icon-edit"></button>
+          <button className="icon icon-destroy" onClick={() => onDelete(id)}></button>
         </div>
-        <input type='text' className='edit' value='Editing task' readOnly />
+        <input type="text" className="edit" value="Editing task" readOnly />
       </li>
     );
   }

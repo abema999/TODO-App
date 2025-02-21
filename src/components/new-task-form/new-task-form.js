@@ -26,8 +26,8 @@ class NewTaskForm extends React.Component {
     return (
       <form onSubmit={this.onSubmit}>
         <input
-          className='new-todo'
-          placeholder='What needs to be done?'
+          className="new-todo"
+          placeholder="What needs to be done?"
           autoFocus
           onChange={this.onChange}
           value={this.state.description}
