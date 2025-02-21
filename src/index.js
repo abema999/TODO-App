@@ -75,6 +75,14 @@ class App extends React.Component {
     this.setState({ filter });
   };
 
+  editTask = (id, newDescription) => {
+    this.setState((prevState) => ({
+      todoData: prevState.todoData.map((task) =>
+        task.id === id ? { ...task, description: newDescription } : task,
+      ),
+    }));
+  };
+
   render() {
     const uncompletedTasks = this.state.todoData.filter((task) => !task.completed).length;
     const filteredTasks = this.filterTasks(this.state.todoData, this.state.filter);
@@ -90,6 +98,7 @@ class App extends React.Component {
             tasks={filteredTasks}
             onDelete={this.deleteTask}
             onComplete={this.completeTask}
+            onEdit={this.editTask}
           ></TaskList>
           <Footer
             uncompletedTasks={uncompletedTasks}

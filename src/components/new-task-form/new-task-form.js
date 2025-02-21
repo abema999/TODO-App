@@ -16,6 +16,7 @@ class NewTaskForm extends React.Component {
   onSubmit = (e) => {
     e.preventDefault();
     if (!this.state.description.trim()) {
+      this.setState({ description: '' });
       return;
     }
     this.props.onAdd(this.state.description);
