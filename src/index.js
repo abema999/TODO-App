@@ -11,10 +11,14 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 class App extends React.Component {
   idCounter = 1;
+  timers = {};
 
-  createTask = (text) => {
+  createTask = (text, min = 0, sec = 0) => {
     return {
-      description: text,
+      title: text,
+      min: min === '' ? 0 : min,
+      sec: sec === '' ? 0 : sec,
+      isTimer: false,
       created: new Date(),
       completed: false,
       id: this.idCounter++,
@@ -26,19 +30,16 @@ class App extends React.Component {
     filter: 'all',
   };
 
-  addTask = (text) => {
-    const newTask = this.createTask(text);
-
-    this.setState((prevState) => {
-      const newArr = [...prevState.todoData, newTask];
-
-      return {
-        todoData: newArr,
-      };
-    });
+  addTask = (text, min, sec) => {
+    const newTask = this.createTask(text, min, sec);
+    this.setState((prevState) => ({
+      todoData: [...prevState.todoData, newTask],
+    }));
   };
 
   deleteTask = (id) => {
+    clearInterval(this.timers[id]);
+    delete this.timers[id];
     this.setState((prevState) => ({
       todoData: prevState.todoData.filter((task) => task.id !== id),
     }));
@@ -53,9 +54,18 @@ class App extends React.Component {
   };
 
   deleteAllCompletedTasks = () => {
-    this.setState((prevState) => ({
-      todoData: prevState.todoData.filter((task) => !task.completed),
-    }));
+    this.setState((prevState) => {
+      const completedTasks = prevState.todoData.filter((task) => task.completed);
+      completedTasks.forEach((task) => {
+        if (this.timers[task.id]) {
+          clearInterval(this.timers[task.id]);
+          delete this.timers[task.id];
+        }
+      });
+      return {
+        todoData: prevState.todoData.filter((task) => !task.completed),
+      };
+    });
   };
 
   filterTasks(tasks, filter) {
@@ -75,18 +85,54 @@ class App extends React.Component {
     this.setState({ filter });
   };
 
-  editTask = (id, newDescription) => {
+  editTask = (id, newTitle) => {
     this.setState((prevState) => ({
       todoData: prevState.todoData.map((task) =>
-        task.id === id ? { ...task, description: newDescription } : task,
+        task.id === id ? { ...task, title: newTitle } : task,
       ),
+    }));
+  };
+
+  startTimer = (id) => {
+    if (this.timers[id]) {
+      clearInterval(this.timers[id]);
+    }
+    this.timers[id] = setInterval(() => this.updateTimer(id), 1000);
+    this.setState((prevState) => ({
+      todoData: prevState.todoData.map((task) =>
+        task.id === id ? { ...task, isTimer: true } : task,
+      ),
+    }));
+  };
+
+  stopTimer = (id) => {
+    clearInterval(this.timers[id]);
+    this.setState((prevState) => ({
+      todoData: prevState.todoData.map((task) =>
+        task.id === id ? { ...task, isTimer: false } : task,
+      ),
+    }));
+  };
+
+  updateTimer = (id) => {
+    this.setState((prevState) => ({
+      todoData: prevState.todoData.map((task) => {
+        if (task.id === id) {
+          const newSec = task.sec + 1;
+          return {
+            ...task,
+            min: newSec === 60 ? task.min + 1 : task.min,
+            sec: newSec === 60 ? 0 : newSec,
+          };
+        }
+        return task;
+      }),
     }));
   };
 
   render() {
     const uncompletedTasks = this.state.todoData.filter((task) => !task.completed).length;
     const filteredTasks = this.filterTasks(this.state.todoData, this.state.filter);
-
     return (
       <section className="todo-app">
         <header className="header">
@@ -99,6 +145,8 @@ class App extends React.Component {
             onDelete={this.deleteTask}
             onComplete={this.completeTask}
             onEdit={this.editTask}
+            onStart={this.startTimer}
+            onStop={this.stopTimer}
           ></TaskList>
           <Footer
             uncompletedTasks={uncompletedTasks}
@@ -120,9 +168,13 @@ App.defaultProps = {
 App.propTypes = {
   todoData: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number,
-      description: PropTypes.string,
+      title: PropTypes.string,
+      min: PropTypes.number,
+      sec: PropTypes.number,
+      isTimer: PropTypes.bool,
+      created: PropTypes.instanceOf(Date),
       completed: PropTypes.bool,
+      id: PropTypes.number,
     }),
   ),
   filter: PropTypes.string,

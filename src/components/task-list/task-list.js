@@ -6,7 +6,7 @@ import Task from '../task/task';
 
 class TaskList extends React.Component {
   render() {
-    const { tasks, onDelete, onComplete, onEdit } = this.props;
+    const { tasks, onDelete, onComplete, onEdit, onStart, onStop } = this.props;
     const elements = tasks.map((task) => {
       return (
         <Task
@@ -15,6 +15,8 @@ class TaskList extends React.Component {
           onDelete={onDelete}
           onComplete={onComplete}
           onEdit={onEdit}
+          onStart={onStart}
+          onStop={onStop}
         ></Task>
       );
     });
@@ -27,19 +29,28 @@ TaskList.defaultProps = {
   tasks: [],
   onDelete: () => {},
   onComplete: () => {},
+  onEdit: () => {},
+  onStart: () => {},
+  onStop: () => {},
 };
 
 TaskList.propTypes = {
   tasks: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number,
-      description: PropTypes.string,
+      title: PropTypes.string,
+      minutes: PropTypes.number,
+      seconds: PropTypes.number,
+      isRunning: PropTypes.bool,
+      created: PropTypes.instanceOf(Date),
       completed: PropTypes.bool,
+      id: PropTypes.number,
     }),
   ),
   onDelete: PropTypes.func,
   onComplete: PropTypes.func,
   onEdit: PropTypes.func,
+  onStart: PropTypes.func,
+  onStop: PropTypes.func,
 };
 
 export default TaskList;

@@ -6,15 +6,15 @@ import { formatDistanceToNowStrict } from 'date-fns';
 class Task extends React.Component {
   state = {
     editing: false,
-    newDescription: this.props.description,
+    newTitle: this.props.title,
   };
 
   onClick = () => {
-    this.setState({ editing: true, newDescription: this.props.description });
+    this.setState({ editing: true, newTitle: this.props.title });
   };
 
   onChange = (e) => {
-    this.setState({ newDescription: e.target.value });
+    this.setState({ newTitle: e.target.value });
   };
 
   onBlur = () => {
@@ -28,15 +28,27 @@ class Task extends React.Component {
   };
 
   saveTask = () => {
-    if (this.state.newDescription.trim()) {
-      this.props.onEdit(this.props.id, this.state.newDescription.trim());
+    if (this.state.newTitle.trim()) {
+      this.props.onEdit(this.props.id, this.state.newTitle.trim());
     }
     this.setState({ editing: false });
   };
 
   render() {
-    const { description, created, completed, id, onDelete, onComplete } = this.props;
-    const { editing, newDescription } = this.state;
+    const {
+      id,
+      title,
+      created,
+      completed,
+      min,
+      sec,
+      isTimer,
+      onDelete,
+      onComplete,
+      onStart,
+      onStop,
+    } = this.props;
+    const { editing, newTitle } = this.state;
 
     return (
       <li className={`${completed ? 'completed' : ''} ${editing ? 'editing' : ''}`}>
@@ -48,8 +60,21 @@ class Task extends React.Component {
             checked={completed}
           />
           <label>
-            <span className="description">{description}</span>
-            <span className="created">created {formatDistanceToNowStrict(created)} ago</span>
+            <span className="title">{title}</span>
+            <span className="description">
+              <button
+                className="icon icon-play"
+                onClick={() => onStart(id)}
+                disabled={isTimer}
+              ></button>
+              <button
+                className="icon icon-pause"
+                onClick={() => onStop(id)}
+                disabled={!isTimer}
+              ></button>
+              {min < 10 ? `0${min}` : min}:{sec < 10 ? `0${sec}` : sec}
+            </span>
+            <span className="description">created {formatDistanceToNowStrict(created)} ago</span>
           </label>
           <button className="icon icon-edit" onClick={this.onClick}></button>
           <button className="icon icon-destroy" onClick={() => onDelete(id)}></button>
@@ -58,7 +83,7 @@ class Task extends React.Component {
           <input
             type="text"
             className="edit"
-            value={newDescription}
+            value={newTitle}
             onChange={this.onChange}
             onBlur={this.onBlur}
             onKeyDown={this.onKeyDown}
@@ -71,20 +96,32 @@ class Task extends React.Component {
 }
 
 Task.defaultProps = {
-  description: '',
+  title: '',
+  created: new Date(),
   completed: false,
+  min: 0,
+  sec: 0,
+  isTimer: false,
   onDelete: () => {},
   onComplete: () => {},
   onEdit: () => {},
+  onStart: () => {},
+  onStop: () => {},
 };
 
 Task.propTypes = {
-  id: PropTypes.number.isRequired,
-  description: PropTypes.string,
+  id: PropTypes.number,
+  title: PropTypes.string,
+  created: PropTypes.instanceOf(Date),
   completed: PropTypes.bool,
+  min: PropTypes.number,
+  sec: PropTypes.number,
+  isTimer: PropTypes.bool,
   onDelete: PropTypes.func,
   onComplete: PropTypes.func,
   onEdit: PropTypes.func,
+  onStart: PropTypes.func,
+  onStop: PropTypes.func,
 };
 
 export default Task;
