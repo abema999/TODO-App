@@ -1,78 +1,68 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './new-task-form.css';
 
-class NewTaskForm extends React.Component {
-  state = {
-    title: '',
-    min: '',
-    sec: '',
+const NewTaskForm = ({ onAdd }) => {
+  const [title, setTitle] = useState('');
+  const [min, setMin] = useState('');
+  const [sec, setSec] = useState('');
+
+  const onChangeTitle = (e) => {
+    setTitle(e.target.value);
   };
 
-  onChangeTitle = (e) => {
-    this.setState({
-      title: e.target.value,
-    });
-  };
-  onChangeMin = (e) => {
+  const onChangeMin = (e) => {
     let min = +e.target.value.replace(/[^0-9]/g, '');
-    this.setState({
-      min: min === 0 ? '' : min,
-    });
-  };
-  onChangeSec = (e) => {
-    let sec = +e.target.value.replace(/[^0-9]/g, '');
-    this.setState({
-      sec: sec === 0 || sec > 59 ? '' : sec,
-    });
+    setMin(min === 0 ? '' : min);
   };
 
-  onSubmit = (e) => {
+  const onChangeSec = (e) => {
+    let sec = +e.target.value.replace(/[^0-9]/g, '');
+    setSec(sec === 0 || sec > 59 ? '' : sec);
+  };
+
+  const onSubmit = (e) => {
     e.preventDefault();
-    if (!this.state.title.trim()) {
-      this.setState({ title: '' });
+    if (!title.trim()) {
+      setTitle('');
       return;
     }
-    this.props.onAdd(this.state.title, this.state.min, this.state.sec);
-    this.setState({ title: '', min: '', sec: '' });
+    onAdd(title, min, sec);
+    setTitle('');
+    setMin('');
+    setSec('');
   };
 
-  onKeyDown = (e) => {
+  const onKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      this.onSubmit(e);
+      onSubmit(e);
     }
   };
 
-  render() {
-    return (
-      <form className="new-todo-form" onSubmit={this.onSubmit} onKeyDown={this.onKeyDown}>
-        <input
-          className="new-todo"
-          placeholder="Task"
-          autoFocus
-          onChange={this.onChangeTitle}
-          value={this.state.title}
-        />
-        <input
-          className="new-todo-form__timer"
-          placeholder="Min"
-          onChange={this.onChangeMin}
-          value={this.state.min}
-        />
-        <input
-          className="new-todo-form__timer"
-          placeholder="Sec"
-          onChange={this.onChangeSec}
-          value={this.state.sec}
-        />
-      </form>
-    );
-  }
-}
-
-NewTaskForm.defaultProps = {
-  onAdd: () => {},
+  return (
+    <form className="new-todo-form" onSubmit={onSubmit} onKeyDown={onKeyDown}>
+      <input
+        className="new-todo"
+        placeholder="Task"
+        autoFocus
+        onChange={onChangeTitle}
+        value={title}
+      />
+      <input
+        className="new-todo-form__timer"
+        placeholder="Min"
+        onChange={onChangeMin}
+        value={min}
+      />
+      <input
+        className="new-todo-form__timer"
+        placeholder="Sec"
+        onChange={onChangeSec}
+        value={sec}
+      />
+    </form>
+  );
 };
 
 NewTaskForm.propTypes = {

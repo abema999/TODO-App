@@ -4,27 +4,16 @@ import PropTypes from 'prop-types';
 import './footer.css';
 import TaskFilter from '../task-filter';
 
-class Footer extends React.Component {
-  render() {
-    const { uncompletedTasks, deleteAllCompletedTasks, filter, selectFilter } = this.props;
-
-    return (
-      <footer className="footer">
-        <span className="todo-count">{uncompletedTasks} items left</span>
-        <TaskFilter filter={filter} selectFilter={selectFilter}></TaskFilter>
-        <button className="clear-completed" onClick={() => deleteAllCompletedTasks()}>
-          Clear completed
-        </button>
-      </footer>
-    );
-  }
-}
-
-Footer.defaultProps = {
-  uncompletedTasks: 0,
-  deleteAllCompletedTasks: () => {},
-  filter: 'all',
-  selectFilter: () => {},
+const Footer = ({ uncompletedTasks, deleteAllCompletedTasks, filter, selectFilter }) => {
+  return (
+    <footer className="footer">
+      <span className="todo-count">{uncompletedTasks} items left</span>
+      <TaskFilter filter={filter} selectFilter={selectFilter}></TaskFilter>
+      <button className="clear-completed" onClick={() => deleteAllCompletedTasks()}>
+        Clear completed
+      </button>
+    </footer>
+  );
 };
 
 Footer.propTypes = {
